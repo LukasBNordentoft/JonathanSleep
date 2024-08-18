@@ -54,7 +54,12 @@ for column in time_columns:
     for row in data.index:
         data[column][row] = datetime.combine(row, datetime.strptime(data[column][row], '%H:%M').time())
 
+#%% Pull Streamlit ineractivity and limit data
 st.sidebar.header('Juster data')
+st.sidebar.write('Indtast eller ret i data:')
+st.sidebar.link_button('Gå til Google Sheet', 'https://docs.google.com/spreadsheets/d/1TkpiDscz__S_MD9TO5PzVmGlVzlGiLRRP-zP225hDt8/edit?gid=0#gid=0')
+
+st.sidebar.write('')
 chosen_days = st.sidebar.slider('Vælg antal dage til analyse.',
                                 max_value = len(data.index), value = 7)
 
@@ -95,10 +100,6 @@ durations_stats_display.name = "Gennemsnitlige søvnlængder"
 # Convert times to hours since midnight
 def time_to_hours(dt):
     return dt.hour + dt.minute / 60.0
-
-# st.sidebar.header('Juster plot')
-# chosen_days = st.sidebar.slider('Vælg antal dage til plot. Viser som udgangspunkt de seneste 7 dage. Dette påvirker også median udregning.',
-#                                 max_value = len(data.index), value = 7)
 
 data_hours = data[time_columns].applymap(lambda x: time_to_hours(x))
 data_hours['Midnat'] = 24
@@ -213,6 +214,14 @@ fig = ax.figure
 #     height=400,  # Set the desired height (in pixels)
 # )
 
+
+#%% Plot three
+
+import plotly.figure_factory as ff
+
+dist1 = ff.create_distplot([data_hours_diff['1. Lur']], ['1. Lur længder'],
+                           bin_size = 0.25)
+
 #%% Format dataframes to contain strings for display
 
 # Format data
@@ -236,16 +245,15 @@ st.sidebar.header('Overblik')
 st.sidebar.write('Jonathans søvn i nøgletal')
 st.sidebar.dataframe(durations_stats_display)
 
-st.header('Jonathans døgnrytme')
+st.header('Jonathans døgnrytme visualiseret')
 st.write('Brug slider i sidebar til at justere antallet af dage der vises.')
 st.pyplot(fig)
 
-# st.plotly_chart(fig2)
+st.header('Fordelinger og statistik')
+st.plotly_chart(dist1)
 
-# st.plotly_chart(fig_go)
 
-
-st.header('Overblik over data i tal')
+st.header('Data i tal')
 col1, col2 = st.columns(2)
 
 with col1:
