@@ -233,7 +233,7 @@ durations_stats_display = durations_stats_display.apply(timedelta_to_str)
 
 # Sidebar:
 st.sidebar.header('Overblik')
-st.sidebar.write('Overblik over Jonathans søvn i nøgletal')
+st.sidebar.write('Jonathans søvn i nøgletal')
 st.sidebar.dataframe(durations_stats_display)
 
 st.header('Jonathans døgnrytme')
