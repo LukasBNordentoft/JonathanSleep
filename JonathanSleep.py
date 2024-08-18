@@ -10,6 +10,7 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime, timedelta
 import numpy as np
+import scipy
 
 st.set_page_config(
      page_title='Jonathans Søvn',
