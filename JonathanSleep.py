@@ -11,6 +11,12 @@ import pandas as pd
 from datetime import datetime, timedelta
 import numpy as np
 
+st.set_page_config(
+     page_title='Jonathans Søvn',
+     layout="wide",
+     initial_sidebar_state="expanded",
+)
+
 # Read sheets data
 sheet_id = '1TkpiDscz__S_MD9TO5PzVmGlVzlGiLRRP-zP225hDt8'
 data = pd.read_csv(f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv")
@@ -47,7 +53,14 @@ time_columns = ['Vågnede', '1. Lur Start', '1. Lur Slut', '2. Lur Start', '2. L
 for column in time_columns:
     for row in data.index:
         data[column][row] = datetime.combine(row, datetime.strptime(data[column][row], '%H:%M').time())
-        
+
+st.sidebar.header('Juster plot')
+chosen_days = st.sidebar.slider('Vælg antal dage til plot. Viser som udgangspunkt de seneste 7 dage. Dette påvirker også median udregning.',
+                                max_value = len(data.index), value = 7)
+
+max_rows = len(data.index)
+
+data = data.iloc[0:chosen_days,:]
 #%% Sleep durations
 
 durations = pd.DataFrame(index = data.index)
@@ -64,10 +77,18 @@ for i in range(len(sleep_durations.index)):
     else:
         sleep_durations[i] = data['Vågnede'].iloc[i] - data['Sov'].iloc[i-1]
 
-durations['Nat']       = sleep_durations
+durations['Nat']        = sleep_durations
 durations['Søvn i alt'] = durations['1. Lur'] + durations['2. Lur'] + durations['Nat']
 
 
+durations_stats = durations.copy()
+durations_stats['1. Lur'] = pd.to_timedelta(durations_stats['1. Lur'].astype(str))
+durations_stats['2. Lur'] = pd.to_timedelta(durations_stats['2. Lur'].astype(str))
+durations_stats['Nat'] = pd.to_timedelta(durations_stats['Nat'].astype(str))
+durations_stats['Søvn i alt'] = pd.to_timedelta(durations_stats['Søvn i alt'].astype(str))
+
+durations_stats_display = durations_stats.mean()
+durations_stats_display.name = "Gennemsnitlige søvnlængder"
 
 #%% Plot One
 
@@ -75,12 +96,13 @@ durations['Søvn i alt'] = durations['1. Lur'] + durations['2. Lur'] + durations
 def time_to_hours(dt):
     return dt.hour + dt.minute / 60.0
 
-chosen_days = st.slider('Vælg antal dage til plot', max_value = len(data.index),
-                        value = len(data.index))
+# st.sidebar.header('Juster plot')
+# chosen_days = st.sidebar.slider('Vælg antal dage til plot. Viser som udgangspunkt de seneste 7 dage. Dette påvirker også median udregning.',
+#                                 max_value = len(data.index), value = 7)
 
 data_hours = data[time_columns].applymap(lambda x: time_to_hours(x))
 data_hours['Midnat'] = 24
-data_hours = data_hours.iloc[0:chosen_days,:]
+# data_hours = data_hours.iloc[0:chosen_days,:]
 data_hours_diff = data_hours.copy()
 
 for i in range(len(data_hours.columns)):
@@ -105,7 +127,7 @@ colors = ['cornflowerblue', '0.99',
 data_hours_diff = data_hours_diff[::-1]
 
 ax = data_hours_diff.plot.barh(stacked = True,
-                               color = colors, figsize = (20, 8*(chosen_days/len(data.index))))
+                               color = colors, figsize = (20, 8*(chosen_days/max_rows)))
 
 ax.axvline(x=data_hours['1. Lur Start'].median(), color='Gold', linestyle='--', linewidth=2)
 ax.axvline(x=data_hours['1. Lur Slut'].median(), color='Gold', linestyle='--', linewidth=2)
@@ -132,12 +154,13 @@ legend_elements = [Line2D([0], [0], color='cornflowerblue', lw=lw1, label='Nat')
                           lw=lw2, label='Sover (Median)'),
                   ]
 ax.legend(handles = legend_elements,
-          loc='upper center', bbox_to_anchor=(0.5, -0.075), ncol=4)
+          loc='upper center', bbox_to_anchor=(0.5, -0.1), ncol=4)
 
+ax.set_xlabel('Tid på dagen [hr]')
 ax.set_xlim([0, 24])
 ax.set_xticks(np.arange(0, 25))
 ax.xaxis.set_tick_params(labeltop=True)
-ax.set_title('Jonathans Døgnrytme', fontsize=35, pad=20)
+# ax.set_title('Jonathans Døgnrytme', fontsize=35, pad=20)
 fig = ax.figure
 
 #%% Plot two
@@ -204,28 +227,34 @@ def timedelta_to_str(td):
 
 durations_str = durations.applymap(timedelta_to_str)
 
+durations_stats_display = durations_stats_display.apply(timedelta_to_str)
+
 #%% Streamlit
 
-st.set_page_config(
-     page_title='Jonathans Søvn',
-     layout="wide",
-     initial_sidebar_state="expanded",
-)
-
 # Sidebar:
-st.sidebar.header('Overview')
+st.sidebar.header('Overblik')
+st.sidebar.write('Overblik over Jonathans søvn i nøgletal')
+st.sidebar.dataframe(durations_stats_display)
 
+st.header('Jonathans døgnrytme')
+st.write('Brug slider i sidebar til at justere antallet af dage der vises.')
 st.pyplot(fig)
 
 # st.plotly_chart(fig2)
 
 # st.plotly_chart(fig_go)
 
-st.write('Data:')
-st.dataframe(data_str)
 
-st.write('Durations:')
-st.dataframe(durations_str)
+st.header('Overblik over data i tal')
+col1, col2 = st.columns(2)
+
+with col1:
+    st.write('Data:')
+    st.dataframe(data_str)
+
+with col2:
+    st.write('Durations:')
+    st.dataframe(durations_str)
 
 #%%
 
