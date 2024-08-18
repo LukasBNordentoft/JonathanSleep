@@ -206,6 +206,15 @@ durations_str = durations.applymap(timedelta_to_str)
 
 #%% Streamlit
 
+st.set_page_config(
+     page_title='Jonathans Søvn',
+     layout="wide",
+     initial_sidebar_state="expanded",
+)
+
+# Sidebar:
+st.sidebar.header('Overview')
+
 st.pyplot(fig)
 
 # st.plotly_chart(fig2)
