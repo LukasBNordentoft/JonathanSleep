@@ -54,8 +54,8 @@ for column in time_columns:
     for row in data.index:
         data[column][row] = datetime.combine(row, datetime.strptime(data[column][row], '%H:%M').time())
 
-st.sidebar.header('Juster plot')
-chosen_days = st.sidebar.slider('Vælg antal dage til plot. Viser som udgangspunkt de seneste 7 dage. Dette påvirker også median udregning.',
+st.sidebar.header('Juster data')
+chosen_days = st.sidebar.slider('Vælg antal dage til analyse.',
                                 max_value = len(data.index), value = 7)
 
 max_rows = len(data.index)
