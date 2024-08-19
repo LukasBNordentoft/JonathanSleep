@@ -55,6 +55,8 @@ for column in time_columns:
     for row in data.index:
         data[column][row] = datetime.combine(row, datetime.strptime(data[column][row], '%H:%M').time())
 
+max_rows = len(data.index)
+
 #%% Pull Streamlit ineractivity and limit data
 st.sidebar.header('Juster data')
 st.sidebar.write('Indtast eller ret i data:')
@@ -62,9 +64,7 @@ st.sidebar.link_button('Gå til Google Sheet', 'https://docs.google.com/spreadsh
 
 st.sidebar.write('')
 chosen_days = st.sidebar.slider('Vælg antal dage til analyse.',
-                                max_value = len(data.index), value = 7)
-
-max_rows = len(data.index)
+                                max_value = max_rows, value = max_rows)
 
 data = data.iloc[0:chosen_days,:]
 #%% Sleep durations
