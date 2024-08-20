@@ -66,7 +66,7 @@ st.sidebar.write('')
 chosen_days = st.sidebar.slider('Vælg antal dage til analyse.',
                                 max_value = max_rows, value = max_rows)
 
-data = data.iloc[0:chosen_days,:]
+data = data.iloc[-chosen_days:]
 #%% Sleep durations
 
 durations = pd.DataFrame(index = data.index)
