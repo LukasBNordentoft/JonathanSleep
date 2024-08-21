@@ -155,15 +155,18 @@ legend_elements = [Line2D([0], [0], color='cornflowerblue', lw=lw1, label='Nat')
                    Line2D([0], [0], color='cornflowerblue', linestyle = '--', 
                           lw=lw2, label='Sover (Median)'),
                   ]
+
+fig = ax.figure
+offset = 0.8
+bbox_y = -offset / fig.get_figheight()
 ax.legend(handles = legend_elements,
-          loc='upper center', bbox_to_anchor=(0.5, -0.1), ncol=4)
+          loc='upper center', bbox_to_anchor=(0.5, bbox_y), ncol=4)
 
 ax.set_xlabel('Tid på dagen [hr]')
 ax.set_xlim([0, 24])
 ax.set_xticks(np.arange(0, 25))
 ax.xaxis.set_tick_params(labeltop=True)
 # ax.set_title('Jonathans Døgnrytme', fontsize=35, pad=20)
-fig = ax.figure
 
 #%% Plot two
 
