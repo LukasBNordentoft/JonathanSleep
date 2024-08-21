@@ -242,17 +242,20 @@ durations_stats_display = durations_stats_display.apply(timedelta_to_str)
 #%% Streamlit
 
 # Sidebar:
+st.sidebar.divider()
 st.sidebar.header('Overblik')
 st.sidebar.write('Jonathans søvn i nøgletal')
 st.sidebar.dataframe(durations_stats_display)
+st.sidebar.divider()
 
 st.header('Jonathans døgnrytme visualiseret')
 st.write('Brug slider i sidebar til at justere antallet af dage der vises.')
 st.pyplot(fig)
+st.divider()
 
 st.header('Fordelinger og statistik')
 st.plotly_chart(dist1)
-
+st.divider()
 
 st.header('Data i tal')
 col1, col2 = st.columns(2)
@@ -264,6 +267,7 @@ with col1:
 with col2:
     st.write('Durations:')
     st.dataframe(durations_str)
+st.divider()
 
 #%%
 
