@@ -16,6 +16,7 @@ st.set_page_config(
      page_title='Jonathans Søvn',
      layout="wide",
      initial_sidebar_state="expanded",
+     page_icon='👨‍🔬'
 )
 
 # Read sheets data
@@ -168,57 +169,6 @@ ax.set_xticks(np.arange(0, 25))
 ax.xaxis.set_tick_params(labeltop=True)
 # ax.set_title('Jonathans Døgnrytme', fontsize=35, pad=20)
 
-#%% Plot two
-
-# import plotly.express as px
-
-# # fig2 = px.bar(data_hours_diff, barmode = 'stack')
-
-# df = data_hours_diff.copy()
-# df.index.name = 'Date'
-# df.reset_index(inplace=True)
-
-# df_melted = df.melt(id_vars = 'Date', var_name='Category', value_name='Value')
-
-# category_order = ['Nat morgen', 'Vågen 1', '1. Lur', 'Vågen 2', '2. Lur', 'Vågen 3', 'Nat aften']
-
-# custom_colors = {
-#     'Nat morgen': 'cornflowerblue',
-#     'Vågen 1': 'white',
-#     '1. Lur': 'Gold',
-#     'Vågen 2': 'white',
-#     '2. Lur': 'Orange',
-#     'Vågen 3': 'white',
-#     'Nat aften': 'cornflowerblue'
-# }
-
-# fig2 = px.bar(df_melted, y = 'Date', x = 'Value', 
-#               color = 'Category', color_discrete_map=custom_colors,
-#               category_orders={'Category': category_order},
-#               orientation='h')
-
-# fig2.update_yaxes(tickmode='array', tickvals = df_melted['Date'].unique())
-# fig2.update_xaxes(tickmode='array', tickvals = np.arange(0, 24))
-
-# fig2.update_layout(
-#     legend=dict(
-#         orientation="h",
-#         yanchor="top",
-#         y=-0.3,  # Adjust the vertical position as needed
-#         xanchor="center",
-#         x=0.5,
-#         title='Legend',
-#         font=dict(size=10),  # Adjust font size if needed
-#         traceorder="normal",  # Keep the legend in the original order
-#         bgcolor='rgba(255,255,255,0)',  # Set background color of legend
-#         itemsizing='constant'  # Keep items in a fixed size
-#     ),
-#     margin=dict(b=80),  # Adjust the bottom margin to fit the legend
-#     width=2000,   # Set the desired width (in pixels)
-#     height=400,  # Set the desired height (in pixels)
-# )
-
-
 #%% Plot three
 
 import plotly.figure_factory as ff
@@ -246,7 +196,6 @@ durations_stats_display = durations_stats_display.apply(timedelta_to_str)
 
 import seaborn as sns
 import matplotlib.pyplot as plt
-from matplotlib.colors import LinearSegmentedColormap
 
 data_for_corr = pd.DataFrame(index = data_hours_diff.index)
 
@@ -260,33 +209,33 @@ sns.heatmap(data_corr, ax=ax4[0], cmap='Blues', annot = True)
 
 #%% Streamlit
 
-# Sidebar:
-st.sidebar.header('Overblik')
-st.sidebar.write('Jonathans søvn i nøgletal')
-st.sidebar.dataframe(durations_stats_display)
+tab1, tab2 = st.tabs(['Data Visualiseret', 'Data i tal'])
 
-st.header('Jonathans døgnrytme visualiseret')
-st.write('Brug slider i sidebar til at justere antallet af dage der vises.')
-st.pyplot(fig)
-st.header('Korrelationer og fordelinger')
-st.write('Korrelationer mellem søvnperioder, samt fordelinger for søvnperioderne.')
-st.pyplot(fig4)
+with tab1:
+    # Sidebar:
+    st.sidebar.header('Overblik')
+    st.sidebar.write('Jonathans søvn i nøgletal')
+    st.sidebar.dataframe(durations_stats_display)
+    
+    st.header('Jonathans døgnrytme visualiseret')
+    st.write('Brug slider i sidebar til at justere antallet af dage der vises.')
+    st.pyplot(fig)
+    st.header('Korrelationer og fordelinger')
+    st.write('Korrelationer mellem søvnperioder, samt fordelinger for søvnperioderne.')
+    st.pyplot(fig4)
 
-# st.header('Fordelinger og statistik')
-# st.plotly_chart(dist1)
-# st.divider()
-
-st.header('Data i tal')
-col1, col2 = st.columns(2)
-
-with col1:
-    st.write('Data:')
-    st.dataframe(data_str)
-
-with col2:
-    st.write('Durations:')
-    st.dataframe(durations_str)
-st.divider()
+with tab2:
+    st.header('Data i tal')
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.write('Data:')
+        st.dataframe(data_str)
+    
+    with col2:
+        st.write('Durations:')
+        st.dataframe(durations_str)
+    st.divider()
 
 
 
