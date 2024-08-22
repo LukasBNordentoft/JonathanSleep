@@ -242,14 +242,28 @@ durations_str = durations.applymap(timedelta_to_str)
 
 durations_stats_display = durations_stats_display.apply(timedelta_to_str)
 
+#%% Correlations
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
+
+data_for_corr = pd.DataFrame(index = data_hours_diff.index)
+
+data_for_corr[['1. Lur', '2. Lur']] = data_hours_diff[['1. Lur', '2. Lur']]
+data_for_corr['Nat'] = data_hours_diff['Nat aften'] + data_hours_diff['Nat morgen']
+data_corr = data_for_corr.corr()
+
+fig4, ax4 = plt.subplots(figsize=(8, 6))
+sns.heatmap(data_corr, ax=ax4, cmap='Blues', annot = True)
+
 #%% Streamlit
 
 # Sidebar:
-st.sidebar.divider()
 st.sidebar.header('Overblik')
 st.sidebar.write('Jonathans søvn i nøgletal')
 st.sidebar.dataframe(durations_stats_display)
-st.sidebar.divider()
+st.pyplot(fig4)
 
 st.header('Jonathans døgnrytme visualiseret')
 st.write('Brug slider i sidebar til at justere antallet af dage der vises.')
@@ -272,55 +286,6 @@ with col2:
     st.dataframe(durations_str)
 st.divider()
 
-#%%
-
-# # Colors for each sleep period
-# colors = ['royalblue', 'darkorange', 'green', 'purple']
-
-# # Add the 24-hour timeline
-# fig.add_trace(go.Scatter(x=list(range(25)), y=[i for i in range(len(data) + 1)], 
-#                          mode='lines', line=dict(color='black'), showlegend=False))
-
-# # Plot each day's data
-# for i, row in data.iterrows():
-#     # Convert times to hours since midnight
-#     intervals = [
-#         (time_to_hours(row['1. Lur Start']), time_to_hours(row['1. Lur Slut']), 'First Nap'),
-#         (time_to_hours(row['2. Lur Start']), time_to_hours(row['2. Lur Slut']), 'Second Nap'),
-#         (time_to_hours(row['Sov']), 24, 'Night Sleep Start'),
-#     ]
-    
-#     # Plot each interval with a different color
-#     for (start, end, label), color in zip(intervals, colors):
-#         fig.add_trace(go.Scatter(
-#             x=[start, end],
-#             y=[i, i],
-#             mode='lines',
-#             line=dict(color=color, width=10),
-#             name=f'{label} - {row["day"]}',
-#             showlegend=True
-#         ))
-
-# # Customize layout
-# fig.update_layout(
-#     title="Child's Sleep Patterns Over Multiple Days",
-#     xaxis=dict(
-#         title='Hour of the Day',
-#         tickmode='linear',
-#         tick0=0,
-#         dtick=1,
-#         range=[0, 24]
-#     ),
-#     yaxis=dict(
-#         title='Day',
-#         tickvals=list(range(len(data))),
-#         ticktext=[f'Day {i + 1}' for i in range(len(data))],
-#         range=[-1, len(data)]
-#     ),
-#     showlegend=True,
-#     height=400,
-#     margin=dict(l=40, r=0, t=50, b=20)
-# )
 
 
 
