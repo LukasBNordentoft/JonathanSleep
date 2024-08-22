@@ -263,7 +263,7 @@ sns.heatmap(data_corr, ax=ax4, cmap='Blues', annot = True)
 st.sidebar.header('Overblik')
 st.sidebar.write('Jonathans søvn i nøgletal')
 st.sidebar.dataframe(durations_stats_display)
-st.pyplot(fig4)
+st.sidebar.pyplot(fig4)
 
 st.header('Jonathans døgnrytme visualiseret')
 st.write('Brug slider i sidebar til at justere antallet af dage der vises.')
