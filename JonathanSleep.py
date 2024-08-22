@@ -218,11 +218,6 @@ with tab1:
     # Sidebar:
     st.sidebar.header('Overblik')
     st.sidebar.write('Jonathans gennemsnitlige søvn')
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        medians = st.toggle('Vis median linjer', value = True)
-    with col2:
-        show_totals = st.toggle('Vis daglig samlet søvnmængde', value = True)
     
     st.sidebar.dataframe(durations_stats_display)
     
