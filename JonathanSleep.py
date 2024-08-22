@@ -254,8 +254,9 @@ data_for_corr[['1. Lur', '2. Lur']] = data_hours_diff[['1. Lur', '2. Lur']]
 data_for_corr['Nat'] = data_hours_diff['Nat aften'] + data_hours_diff['Nat morgen']
 data_corr = data_for_corr.corr()
 
-fig4, ax4 = plt.subplots(figsize=(8, 6))
-sns.heatmap(data_corr, ax=ax4, cmap='Blues', annot = True)
+fig4, ax4 = plt.subplots(nrows = 1, ncols = 2, figsize=(20, 5),
+                         gridspec_kw={'width_ratios': [1, 2]})
+sns.heatmap(data_corr, ax=ax4[0], cmap='Blues', annot = True)
 
 #%% Streamlit
 
@@ -263,13 +264,13 @@ sns.heatmap(data_corr, ax=ax4, cmap='Blues', annot = True)
 st.sidebar.header('Overblik')
 st.sidebar.write('Jonathans søvn i nøgletal')
 st.sidebar.dataframe(durations_stats_display)
-st.sidebar.write('Korrelationer mellem søvnperioder')
-st.sidebar.pyplot(fig4)
 
 st.header('Jonathans døgnrytme visualiseret')
 st.write('Brug slider i sidebar til at justere antallet af dage der vises.')
 st.pyplot(fig)
-st.divider()
+st.header('Korrelationer og fordelinger')
+st.write('Korrelationer mellem søvnperioder, samt fordelinger for søvnperioderne.')
+st.pyplot(fig4)
 
 # st.header('Fordelinger og statistik')
 # st.plotly_chart(dist1)
