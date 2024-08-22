@@ -16,7 +16,7 @@ st.set_page_config(
      page_title='Jonathans Søvn',
      layout="wide",
      initial_sidebar_state="expanded",
-     page_icon='👨‍🔬'
+     page_icon='👨‍👶'
 )
 
 # Read sheets data
