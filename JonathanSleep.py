@@ -95,7 +95,7 @@ durations_stats['Nat'] = pd.to_timedelta(durations_stats['Nat'].astype(str))
 durations_stats['Søvn i alt'] = pd.to_timedelta(durations_stats['Søvn i alt'].astype(str))
 
 durations_stats_display = durations_stats.mean()
-durations_stats_display.name = "Gennemsnitlige søvnlængder"
+durations_stats_display.name = "Søvn [hr]"
 
 #%% Plot One
 
@@ -214,7 +214,7 @@ tab1, tab2 = st.tabs(['Data Visualiseret', 'Data i tal'])
 with tab1:
     # Sidebar:
     st.sidebar.header('Overblik')
-    st.sidebar.write('Jonathans søvn i nøgletal')
+    st.sidebar.write('Jonathans gennemsnitlige søvn')
     st.sidebar.dataframe(durations_stats_display)
     
     st.header('Jonathans døgnrytme visualiseret')
