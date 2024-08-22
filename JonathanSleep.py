@@ -145,16 +145,16 @@ lw1 = 10
 lw2 = 4
 legend_elements = [Line2D([0], [0], color='cornflowerblue', lw=lw1, label='Nat'),
                    Line2D([0], [0], color='cornflowerblue', linestyle = '--', 
-                          lw=lw2, label='Vågner (Median)'),
+                          lw=lw2, label='Vågner'),
                    Line2D([0], [0], color='Gold', lw=lw1, label='1. Lur'),
                    Line2D([0], [0], color='Gold', linestyle = '--', 
-                          lw=lw2, label='1. Lur Start/Slut (Median)'),
+                          lw=lw2, label='1. Lur Start/Slut'),
                    Line2D([0], [0], color='Orange', lw=lw1, label='2. Lur'),
                    Line2D([0], [0], color='Orange', linestyle = '--', 
-                          lw=lw2, label='2. Lur Start/Slut (Median)'),
+                          lw=lw2, label='2. Lur Start/Slut'),
                    Line2D([0], [0], color='0.99', lw=lw1, label='Vågen'),
                    Line2D([0], [0], color='cornflowerblue', linestyle = '--', 
-                          lw=lw2, label='Sover (Median)'),
+                          lw=lw2, label='Sover'),
                   ]
 
 fig = ax.figure
@@ -218,7 +218,7 @@ with tab1:
     st.sidebar.dataframe(durations_stats_display)
     
     st.header('Jonathans døgnrytme visualiseret')
-    st.write('Brug slider i sidebar til at justere antallet af dage der vises.')
+    st.write('Jonathans nat, 1. lur og 2. lur hver dag, med median start/slut tider (stiplede linjer)')
     st.pyplot(fig)
     st.header('Korrelationer og fordelinger')
     st.write('Korrelationer mellem søvnperioder, samt fordelinger for søvnperioderne.')
