@@ -2,8 +2,7 @@
 """
 Created on Wed Aug 14 19:44:37 2024
 @authors: 
-    Lukas B. Nordentoft, lbn@mpe.au.dk
-    Anders L. Andreasen, ala@mpe.au.dk
+    Lukas B. Nordentoft
 """
 
 import streamlit as st
@@ -168,6 +167,10 @@ ax.set_xlim([0, 24])
 ax.set_xticks(np.arange(0, 25))
 ax.xaxis.set_tick_params(labeltop=True)
 # ax.set_title('Jonathans Døgnrytme', fontsize=35, pad=20)
+
+total_sleep = data_hours_diff[['Nat morgen', '1. Lur', '2. Lur', 'Nat aften']].sum(axis=1)
+total_strings = [f"         {total:.1f}" for total in total_sleep.iloc[:-1]] + [f" I alt: {total_sleep.iloc[-1]:.1f} timer"]
+ax.bar_label(ax.containers[6], labels = total_strings)
 
 #%% Plot three
 
