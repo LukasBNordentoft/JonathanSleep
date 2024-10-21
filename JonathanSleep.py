@@ -129,7 +129,7 @@ colors = ['cornflowerblue', '0.99',
 data_hours_diff = data_hours_diff[::-1]
 
 ax = data_hours_diff.plot.barh(stacked = True,
-                               color = colors, figsize = (20, 4*(chosen_days/max_rows)))
+                               color = colors, figsize = (20, 24*(chosen_days/max_rows)))
 
 ax.axvline(x=data_hours['1. Lur Start'].median(), color='Gold', linestyle='--', linewidth=2)
 ax.axvline(x=data_hours['1. Lur Slut'].median(), color='Gold', linestyle='--', linewidth=2)
